@@ -1,0 +1,72 @@
+ html, body {
+           width: 100%;
+           height: 100%;
+           margin: 0;
+           padding: 0;
+       }
+	   
+	  #map {
+           width: 100%;
+           height: 390px;
+		
+	      }
+		  
+		  
+	#google_pano {
+           width: 100%;
+           height: 450px;
+		
+	      }
+
+
+
+.icon {
+  max-width: 150px;
+  margin: 0 auto;
+  display: block;
+}
+
+.what_to_include section {
+  text-align: center;
+}
+
+
+h1 {
+	font-size: 30px;
+	margin-bottom: 40px;
+	
+	}
+	
+	
+.form-get-variants {
+	margin-top: 100px;
+	
+	}
+	
+.gk_gallery {
+	
+  
+  background-position: center center;
+  background-size: cover;
+  height: 450px;
+  overflow:hidden;
+	
+	
+	}
+	
+.navbar {
+	border-radius: 0px;
+	border-bottom: 1px solid #555555;
+	border-top: 1px solid #555555;
+	}
+	
+.zayavka {
+	background-color:#DEE1E9;	
+	}
+	
+	
+/*.form-group {
+	
+	margin-bottom: 20px; border: 1px solid red;
+	padding-bottom: 20px;
+	}*/

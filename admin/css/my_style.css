@@ -1,0 +1,47 @@
+body {
+/* font-family: Play; */  
+    
+}
+
+.double-input .form-control {
+    width: 50%;
+    border-right-width: 1px;
+}
+
+.red {
+    color:red;
+    }
+
+
+.label-primary {
+    
+    font-size: 90%;
+    font-weight: 300;
+    border-radius: 1px;
+    letter-spacing: 1px;
+    display: block;
+    text-align: right;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    
+}
+
+
+.nice_td {
+    width: 50%;
+    border: 2px solid #fff;
+    font-size: 100%;
+    padding-top: 7px;
+    padding-bottom: 7px;  
+}
+
+.nice_td_header {
+    background-color: #e6f2ff;
+   text-align: right;
+    padding-right: 4px;
+    font-weight: 400;
+     letter-spacing: 1px;
+}
+
+
+
