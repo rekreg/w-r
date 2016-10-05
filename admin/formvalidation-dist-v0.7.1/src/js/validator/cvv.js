@@ -81,8 +81,8 @@
             }
 
             // Get the credit card number
-            var creditCard = validator.getFieldElements(options.creditCardField).val();
-            if (creditCard === '') {
+            var creditCard = validator.getFieldValue(options.creditCardField, 'creditCard');
+            if (creditCard === null || creditCard === '') {
                 return true;
             }
             
@@ -93,6 +93,10 @@
                 AMERICAN_EXPRESS: {
                     length: [15],
                     prefix: ['34', '37']
+                },
+                DANKORT: {
+                    length: [16],
+                    prefix: ['5019']
                 },
                 DINERS_CLUB: {
                     length: [14],
@@ -111,6 +115,16 @@
                              '622924', '622925', '644', '645', '646', '647', '648',
                              '649', '65']
                 },
+                ELO: {
+                    length: [16],
+                    prefix: ['4011', '4312', '4389', '4514', '4573', '4576',
+                             '5041', '5066', '5067', '509',
+                             '6277', '6362', '6363', '650', '6516', '6550']
+                },
+                FORBRUGSFORENINGEN: {
+                    length: [16],
+                    prefix: ['600722']
+                },
                 JCB: {
                     length: [16],
                     prefix: ['3528', '3529', '353', '354', '355', '356', '357', '358']
@@ -121,7 +135,7 @@
                 },
                 MAESTRO: {
                     length: [12, 13, 14, 15, 16, 17, 18, 19],
-                    prefix: ['5018', '5020', '5038', '6304', '6759', '6761', '6762', '6763', '6764', '6765', '6766']
+                    prefix: ['5018', '5020', '5038', '5868', '6304', '6759', '6761', '6762', '6763', '6764', '6765', '6766']
                 },
                 MASTERCARD: {
                     length: [16],
@@ -137,6 +151,10 @@
                              '62215', '62216', '62217', '62218', '62219', '6222', '6223',
                              '6224', '6225', '6226', '6227', '6228', '62290', '62291',
                              '622920', '622921', '622922', '622923', '622924', '622925']
+                },
+                VISA_ELECTRON: {
+                    length: [16],
+                    prefix: ['4026', '417500', '4405', '4508', '4844', '4913', '4917']
                 },
                 VISA: {
                     length: [16],

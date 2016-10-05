@@ -140,7 +140,7 @@ public static function floor_types($arr) {
 	
 	$matches = array();
 	foreach($arr as $obj) {
-	if($obj->floor) {
+	if($obj->floor && $obj->floor != 0) {
 		preg_match_all('!\d+!', $obj->floor, $matches[]);
 		if(strrpos($obj->floor,"М") || strrpos($obj->floor,"м")) { 
 				$mansarda = "Есть квартиры с мансардами";
@@ -201,7 +201,7 @@ public static function metragi_kvartir_v_dome($arr) {
         for($i = 1; $i <= $max_col_comnat; $i++) {
 				
 				foreach($arr as $obj) {
-				  if($obj->rooms == $i && $obj->m2 !=="") { $arr_with_m2[$i][] = $obj->m2; }
+				  if($obj->rooms == $i && $obj->m2 !=="" && $obj->obj_type == "квартира") { $arr_with_m2[$i][] = $obj->m2; }
 						  } // end foreach($arr as $key => $value)
 						
 		       	} // for($i = $max_col_comnat; $i >=1; $i--)
@@ -281,7 +281,7 @@ public static function price_kvartir_v_dome($arr) {
 			for($i = 1; $i <= $max_col_comnat; $i++) {
 				
 				foreach($arr as $obj) {
-				  if($obj->rooms == $i && $obj->kad_price !=="") { $arr_with_price[$i][] = $obj->kad_price; }
+if($obj->rooms == $i && $obj->kad_price !== "" && $obj->kad_price != 0 && $obj->obj_type == "квартира"){ $arr_with_price[$i][] = $obj->kad_price; }
 						  } // end foreach($arr as $key => $value)
 						
 		       	} // for($i = $max_col_comnat; $i >=1; $i--)
@@ -492,7 +492,8 @@ public static function main_appartment_table($arr) {
       НЕТ ДАННЫХ
   </div>";  
      return $output;
- } else {  
+ } 
+    else {  
 $output = "<div class='row'>
 <div class='col-xs-12'>
     
@@ -615,10 +616,48 @@ $output .= self::draw_table_from_array($arr);
      
 $output .= " </div> </div></div> <br><br>";    
  }
+    
+    
     return $output;
+    
     
 }    
 
+  
+    
+    
+public static function get_data_by_building($arr){
+  
+    $data_arr = array();
+    
+ if(empty($arr)){
+ // Если массив объектов пуст
+    $data_arr[averege_m2] = "0"; 
+    $data_arr[price_kvartir_v_dome] = "0"; 
+    $data_arr[unique_rooms] = "0"; 
+    $data_arr[floor_types] = "0"; 
+    $data_arr[metragi_kvartir_v_dome] = "0";
+     
+     
+ } 
+    else {  
+
+ $data_arr[averege_m2] = number_format(self::averege_m2($arr),0,'',' ');
+
+
+$data_arr[price_kvartir_v_dome] = self::price_kvartir_v_dome($arr);
+
+$data_arr[unique_rooms] = self::unique_rooms($arr);
+
+$data_arr[floor_types] = self::floor_types($arr);
+     
+$data_arr[metragi_kvartir_v_dome] = self::metragi_kvartir_v_dome($arr);
+
+    
+}   
+ return $data_arr;   
+}
+    
     
     
 public static function find_object_by_id($id) {

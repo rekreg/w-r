@@ -37,30 +37,14 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
     
       $building = Building::find_building_by_kad($dom_kad);
 
-      $objects = Object_m::find_all_objects_by_kad($dom_kad);
      
-     
-	 // $object = new Object_m();
+	
     
-     // $objects = $object->find_all_objects_by_kad($dom_kad);
-     // $count_flat = $objects->flats_amount;
-    
-      /*$flats_amount = Object_m::get_flats($objects);
-      $unique_rooms = Object_m::unique_rooms($objects);
-      $floor_types = Object_m::floor_types($objects);
-      $metragi_kvartir_v_dome = Object_m::metragi_kvartir_v_dome($objects);
-
-        $draw_table_from_array = Object_m::draw_table_from_array($objects);*/
-    
-    
-    $main_appartment_table = Object_m::main_appartment_table($objects);
+   $main_appartment_table = Building::main_appartment_table($building);
     
     
     
-    // Object_m::find_all_objects_by_kad($dom_kad);
-    // $objects = Object_m::$flats_arr;
-     //$count_flat = Object_m::$flats_in_building;
-    
+   
     // Узнаем округ
    
     switch($building->kad_district) {
@@ -129,6 +113,18 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
 <div class="row">
 <div class="col-lg-12">
 
+    
+<ul class="pager">
+  <li class="previous "><a href="index.php" style="font-weight: bold">
+      <i class='fa fa-arrow-left' aria-hidden='true'></i>
+      Поиск домов</a></li>
+  
+</ul>    
+
+    
+    
+    
+    
 <h1 class="text-center">  
  <?php 
    
@@ -352,11 +348,12 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
     
     
     
+
  <?=$main_appartment_table?>
+
     
     
-    
-    
+
     
     
     

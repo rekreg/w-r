@@ -251,6 +251,8 @@ if (typeof jQuery === 'undefined') {
                         // aren't defined by the 'button.selector' option
                         if (that.options.button.selector && !$button.is(that.options.button.selector) && !$button.is(that.$hiddenButton)) {
                             that.$form.off('submit.' + that._namespace).submit();
+                            // Fix the issue where 'formnovalidate' causes IE to send two postbacks to server
+                            return false;
                         }
                     }
                 });
@@ -1578,7 +1580,8 @@ if (typeof jQuery === 'undefined') {
                     fv: this,
                     field: field,
                     element: $field,
-                    status: status
+                    status: status,
+                    validator: validatorName
                 });
                 this._onFieldValidated($field, validatorName);
             }
@@ -1639,7 +1642,7 @@ if (typeof jQuery === 'undefined') {
 
             var that       = this,
                 type       = fields.attr('type'),
-                total      = ('radio' === type || 'checkbox' === type) ? 1 : fields.length,
+                total      = (('radio' === type || 'checkbox' === type) && this.options.live !== 'disabled') ? 1 : fields.length,
                 updateAll  = ('radio' === type || 'checkbox' === type),
                 validators = this.options.fields[field].validators,
                 verbose    = this.isOptionEnabled(field, 'verbose'),
@@ -1837,11 +1840,12 @@ if (typeof jQuery === 'undefined') {
                 row    = this.options.fields[field].row || this.options.row.selector;
                 for (i = 0; i < fields.length; i++) {
                     $field = fields.eq(i);
+                    // Remove all error messages
+                    var $messages = $field.data(ns + '.messages');
+                    if ($messages) {
+                        $messages.find('.' + clazz + '[data-' + ns + '-validator][data-' + ns + '-for="' + field + '"]').remove();
+                    }
                     $field
-                        // Remove all error messages
-                        .data(ns + '.messages')
-                            .find('.' + clazz + '[data-' + ns + '-validator][data-' + ns + '-for="' + field + '"]').remove().end()
-                            .end()
                         .removeData(ns + '.messages')
                         .removeData(ns + '.validators')
                         // Remove feedback classes

@@ -2,6 +2,13 @@
 
 class Building {
 
+    
+    
+  protected static $db_table = "buildings";
+  protected static $db_table_fields = array('kad_number', 'average_m2_cost', 'flats_cost', 'floor_types', 'flats_type', 'flats_m2', 'status');  
+    
+    
+    
   public $id;
   public $kad_number;
   public $inhabited;
@@ -17,6 +24,12 @@ class Building {
   public $year_of_built;
   public $year_of_use;
   public $walls;
+  public $flats;
+  public $average_m2_cost;
+  public $flats_cost;
+  public $floor_types;
+  public $flats_type;
+  public $flats_m2;
   public $metro_name_1;
   public $metro_name_2;
   public $metro_name_3;
@@ -501,6 +514,293 @@ $output .= "</tbody></table> </div> ";
     
     
 }    
+    
+    
+    
+///// Отрисовка Главной таблицы из из Массива
+public static function draw_table_from_array($arr) {
+		
+		
+    
+ $output = "
+<!-- Modal -->
+<div class='modal fade' id='myModal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel'>
+  <div class='modal-dialog modal-lg' role='document'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+        <h4 class='modal-title text-center' id='myModalLabel'>Квартиры в доме</h4>
+      </div>
+      <div class='modal-body'>";
+      
+    
+    
+  
+    
+    
+	$output .= "<div class='table-responsive'>";
+	$output .= "<table class='table table-striped table-hover '>";
+	
+	$output .=  "
+ <thead>
+    <tr>
+			  <th>№ Кв. </th>
+			  <th>Этаж</th>
+			  <th>Кол. комнат</th>
+			  <th>м2</th>
+			  <th>Кадастровая стоимость</th>
+    </tr>
+  </thead>
+  <tbody>
+"; 
+		
+		
+		
+		
+		
+		
+		foreach($arr as $obj) {
+	
+				$output .= "<tr>";			  
+	$output .= "<td> ";
+	if(ctype_digit($obj->apartment)) {$output .= " кв. <span class='label label-warning'>
+{$obj->apartment}</span></td>"; }
+	elseif($obj->apartment) {
+        $output .= " кв. <span class='label label-warning'>
+{$obj->apartment}</span></td>";
+    
+    }
+	else {$output .= " - "; }
+	$output .= "</td>";						  
+							  
+	
+	$output .= " <td> ";
+	if($obj->floor) {$output .= "эт. {$obj->floor}"; }
+	else {$output .= " - "; }
+	$output .= "</td>";
+	
+	/*
+	$output .= " <td> ";
+	if($obj->rooms_str) {$output .= "{$obj->rooms_str}"; }
+	else {$output .= " - "; }
+	$output .= "</td>	";	*/
+							  
+	$output .= " <td> ";
+	if($obj->rooms) {$output .= "{$obj->rooms}-комнатная"; }
+	else {$output .= " - "; }
+	$output .= "</td>	";					  
+		
+	$output .= " <td> ";
+	if($obj->m2) {$output .= "{$obj->m2} м²"; }
+	else {$output .= " - "; }
+	$output .= "</td>	";	
+	
+	/*$output .= " <td> ";
+	if($obj->count_address) {$output .= "{$obj->count_address}"; }
+	else {$output .= " - "; }
+	$output .= "</td>	";		*/				  
+							  
+					  
+							
+		 /* $output .= "<td>";
+		
+		  if($obj->egrp =="") { $output .= "<span class='label label-warning'><span class='glyphicon glyphicon-minus'></span> ЕГРП</span> "; } 
+		  else  { $output .= "<span class='label label-success'><span class='glyphicon glyphicon-ok'></span> ЕГРП</span> ";}
+		  if($obj->kadastr =="")  { $output .= "<span class='label label-warning'><span class='glyphicon glyphicon-minus'></span>КАДАСТР</span> ";}
+		  else { $output .= "<span class='label label-success'><span class='glyphicon glyphicon-ok'></span> КАДАСТР</span> "; }
+		  
+		  $output .= "</td>";*/
+							 
+							 
+		  $output .= "<td>";
+		  if($obj->kad_price) {
+              //$output .= "{$obj->kad_price}"; 
+          $output .= number_format($obj->kad_price,0,'',' ');
+          $output .= " <i class='fa fa-rub' aria-hidden='true'></i>";
+          }
+		  else {$output .= " - "; }
+		  $output .= "</td>	";	
+	
+					$output .= " </tr>";
+  
+					} // foreach($arr as $key => $value)
+		
+		
+		$output .=  " </tbody>";
+		  $output .="</table>";
+		  $output .="</div>";
+    
+    $output .= "
+    
+    </div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-default center-block' data-dismiss='modal'>Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div> ";
+    
+    
+    
+    
+    
+    
+	
+	return $output;
+		} // end function draw_table_from_array($arr)    
+    
+     
+    
+    
+public static function main_appartment_table($arr) {
+    
+ if(empty($arr) || $arr->flats == 0){
+ $output = " 
+ <h2 class='text-center'>Квартиры</h2>
+
+  <div class='alert alert-dismissible alert-warning text-center'>
+      <i class='fa fa-ban' aria-hidden='true'></i> 
+      НЕТ ДАННЫХ
+  </div>";  
+     return $output;
+ } 
+    else {  
+$output = "<div class='row'>
+<div class='col-xs-12'>
+    
+<h2 class='text-center'>Квартиры</h2>";
+ 
+ $output .= "<div class='row'>"; 
+     
+ $output .= "<div class='col-md-6'>";    
+     $output .= "<h3 class='text-center'> <i class='fa fa-money' aria-hidden='true'></i> Цены</h3>";
+
+     $output .=  "<div class='panel panel-default'>
+  <div class='panel-body'>"; 
+    
+     
+     
+     
+  $output .= "<div class='table-responsive'>  
+   <table class='table' >
+  
+  <tbody>
+    <tr >
+     <td class='text-right' style='border-top: 0px;'><br> 
+     
+     <span class='label label-primary'>Средн. цена м²:</span>
+     
+     </td>
+      <td style='font-size: 300%; border-top: 0px;'>";
+ $output .= $arr->average_m2_cost;
+ $output .= " руб";  
+ $output .= "</td></tr>";
+     
+     
+$output .= "<tr><td class='text-right'>
+ <span class='label label-primary'>Динамика за месяц:</span>
+</td>";  
+$output .= "<td style='height: 80px;'><span class='label label-success' style= 'font-size: 1.1em; font-weight: 200; display: inline-block; padding: 6px; margin: 0px;'> <i class='fa fa-level-up' aria-hidden='true'></i> 0,03 % </span>";
+
+$output .= "</td></tr>";
+
+ 
+$output .= "<tr><td class='text-right'>
+<span class='label label-primary'>Цены квартир:</span>
+</td>";  
+$output .= "<td>";      
+$output .= $arr->flats_cost;
+$output .= "</td></tr>";
+  
+ $output .= " </tbody>
+</table> 
+    
+    </div>";   
+     
+  $output .= "</div>";
+  $output .= "</div>";
+  $output .= "</div>";
+     
+ $output .= "<div class='col-md-6'>"; 
+        $output .= "<h3 class='text-center'>  <img src='img/appartment_icon.png'> Параметры квартир</h3>";
+
+     $output .=  "<div class='panel panel-default'>
+  <div class='panel-body'>";
+     
+    
+  $output .= "<div class='table-responsive'>  
+   <table class='table'>
+  
+  <tbody>
+    <tr>
+    <td class='text-right' style='border-top: 0px;'><br> <span class='label label-primary'>Квартир в доме:</span>
+</td>
+      <td style='font-size: 300%; border-top: 0px;'>";
+   $output .= $arr->flats;
+    
+  $output .= "<!-- Button trigger modal -->
+<button type='button' class='btn btn-success btn-sm' data-toggle='modal' data-target='#myModal'>
+  <i class='fa fa-database' aria-hidden='true'></i> Посмотреть 
+</button>";      
+     
+     
+ $output .= "</td></tr>";
+     
+     
+$output .= "<tr><td class='text-right' style='height: 80px;'>
+
+<span class='label label-primary'>Типы квартир:</span>
+
+</td>";  
+$output .= "<td>";
+$output .= $arr->flats_type;
+$output .= "<br>";     
+$output .= $arr->floor_types;
+$output .= "</td></tr>";
+
+ 
+$output .= "<tr><td class='text-right'>
+
+<span class='label label-primary'>Метражи:</span>
+
+</td>";  
+$output .= "<td>";      
+$output .= $arr->flats_m2;
+$output .= "</td></tr>";
+  
+ $output .= " </tbody>
+</table> 
+    
+    </div>
+    </div>
+     </div>
+    
+    
+    </div>
+    
+   <br> 
+   <hr>
+    <br>";
+    
+//$output .= self::draw_table_from_array($arr);
+  
+     
+$output .= " </div> </div></div> <br><br>";    
+ }
+    
+    
+    return $output;
+    
+    
+}        
+    
+    
+    
+    
+    
+    
+    
+    
  
 public static function find_this_query($sql) {
     global $database;   
@@ -522,6 +822,14 @@ public static function find_all_buildings() {
         return self::find_this_query("SELECT * FROM buildings LIMIT 30");
         
     }
+    
+public static function find_buildings_by_quantity($number) {
+    
+        return self::find_this_query("SELECT * FROM buildings WHERE status = '' AND flats > 0 LIMIT {$number}");
+        
+    }    
+    
+
 
 public static function find_building_by_id($id) {
     $result_set = self::find_this_query("SELECT * FROM buildings WHERE id={$id} LIMIT 1");
@@ -535,17 +843,20 @@ public static function find_building_by_kad($kad) {
     $the_result_array = self::find_this_query("SELECT * FROM metro_info, buildings WHERE kad_number='$kad' AND (metro_info.dom_id=buildings.id) LIMIT 1");
     return !empty($the_result_array) ? array_shift($the_result_array) : false; 
     
-    
-    
-   /* 
-     $the_result_array = self::find_this_query("SELECT * FROM users WHERE id={$id} LIMIT 1");
-        
-    return !empty($the_result_array) ? array_shift($the_result_array) : false;  */ 
-    
-    
-    
+  
     
     }    
+
+    
+public static function find_building_by_address($obj) {
+    $the_result_array = self::find_this_query("SELECT * FROM metro_info, buildings WHERE (street_name='$obj->street' AND dom='$obj->house' AND korpus='$obj->block') AND (metro_info.dom_id=buildings.id) LIMIT 1");
+    return !empty($the_result_array) ? array_shift($the_result_array) : false; 
+    
+  
+    
+    }     
+    
+    
     
     
 public static function instantation($the_record){
@@ -577,7 +888,124 @@ private function has_the_attribute($the_attribute) {
     return array_key_exists($the_attribute, $object_properties);
      
  }   
+
+
+    
+   
+    protected function clean_properties() {
+       global $database;
+       $clean_properties = array();
+       foreach($this->properties() as $key => $value) {
+        $clean_properties[$key] = $database->escape_string($value);   
+       }
+        return $clean_properties;
+    }
+    
+    
+    public function save() {
+    return isset($this->id) ? $this->update() : $this->create();
         
+    }
+    
+    public function create() {
+     global $database;
+        
+    $properties = $this->clean_properties();
+        
+    $sql = "INSERT INTO " .self::$db_table.
+    "(".implode(",", array_keys($properties)).")";
+    $sql .= "VALUES ('".  implode("','", array_values($properties))        ."')";
+ 
+        
+    if($database->query($sql)) {
+        $this->id = $database->the_insert_id();
+        return true;
+    } else {
+        return false;
+    }
+    
+        
+        
+    }
+    
+    public function update() {
+        global $database;
+        
+        
+        $properties = $this->clean_properties();
+        $properties_pairs = array();
+        
+        foreach ($properties as $key => $value) {
+         $properties_pairs[] = "{$key}='{$value}'";   
+        }
+        
+        
+        
+        
+        $sql = "UPDATE ".self::$db_table." SET ";
+        $sql .= implode(", ", $properties_pairs);
+        $sql .= " WHERE id = " .$database->escape_string($this->id);
+        
+        $database->query($sql);
+        
+        return (mysqli_affected_rows($database->connection) == 1) ? true : false;
+        
+
+    }
+    
+    
+    
+    
+        
+    public static function update_building($arr, $building_kad) {
+        global $database;
+        
+        
+$sql = "UPDATE buildings SET 
+average_m2_cost='$arr[averege_m2]',
+flats_cost='$arr[price_kvartir_v_dome]',
+floor_types='$arr[floor_types]',
+flats_type='$arr[unique_rooms]',
+flats_m2='$arr[metragi_kvartir_v_dome]',
+status='1' 
+WHERE kad_number='$building_kad'";
+       
+        
+        
+       
+        
+        $database->query($sql);
+        
+        return (mysqli_affected_rows($database->connection) == 1) ? true : false;
+        
+
+    }
+    
+    
+    
+    
+    
+    
+    public function delete() {
+        
+     global $database;
+        
+        $sql = "DELETE FROM ".self::$db_table." ";
+        $sql .= "WHERE id = ". $database->escape_string($this->id); 
+        $sql .= " LIMIT 1";
+        
+        $database->query($sql);
+        
+        return (mysqli_affected_rows($database->connection) == 1) ? true : false;    
+        
+        
+        
+    }
+    
+    
+    
+    
+    
     
 } // end class Building
 

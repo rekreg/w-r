@@ -8,11 +8,11 @@
                         </li>
                         
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-wpforms"></i> Мои объявления</a>
+                            <a href="objects.php"><i class="fa fa-fw fa-wpforms"></i> Мои объявления</a>
                         </li>
                         
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Настройки профиля</a>
+                            <a href="edit_profile.php?id=<?=$session->user_id?>"><i class="fa fa-fw fa-gear"></i> Настройки профиля</a>
                         </li>
                         <li class="divider"></li>
                         <li>

@@ -5,6 +5,10 @@ class Session {
 private $signed_in = false;
 public $user_id;
 public $email;
+
+public $action;
+
+public $current_uniq_id;
     
     
 function __construct(){
@@ -32,7 +36,41 @@ public function login($user) {
     
 }
     
+public function action_maker($action){
     
+if($action == "update") {
+    $this->action = $_SESSION['action'] = "update";
+}
+elseif($action == "delete") {
+  
+    $this->action = $_SESSION['action'] = "delete";
+    
+}
+    
+    
+}
+    
+    
+public function action_checker(){
+    
+if($_SESSION['action'] == "update") {
+    unset($_SESSION['action']);
+    return "update";
+    
+}
+elseif($_SESSION['action'] == "delete") {
+    unset($_SESSION['action']);
+    return "delete";
+    
+} else {
+    unset($_SESSION['action']);
+    return false;
+    
+}
+    
+    
+}
+       
     
 public function logout() {
     
@@ -62,9 +100,40 @@ private function check_the_login() {
 }    
     
     
+  
+public function set_current_uniq_id() {
+    
+  if($this->user_id) {
+      
+    if(empty($_SESSION['current_uniq_id'])) {
+        
+        $prefix = $this->user_id."_";
+        $this->current_uniq_id = uniqid($prefix);
+        $_SESSION['current_uniq_id'] = $this->current_uniq_id;
+       // return true;
+    } else {
+        $this->current_uniq_id = $_SESSION['current_uniq_id'];
+    }
+                    
+                    }
     
     
     
+    
+}
+   
+ 
+public function delete_current_uniq_id() {
+    
+    if($_SESSION['current_uniq_id']) {
+       unset($_SESSION['current_uniq_id']);
+        $this->current_uniq_id = null;
+        return true;
+    } else {
+       return false;   
+    }
+    
+}
     
     
 } // end Session class

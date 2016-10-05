@@ -16,6 +16,17 @@
     });
 
     FormValidation.Validator.file = {
+        Error: {
+            EXTENSION: 'EXTENSION',
+            MAX_FILES: 'MAX_FILES',
+            MAX_SIZE: 'MAX_SIZE',
+            MAX_TOTAL_SIZE: 'MAX_TOTAL_SIZE',
+            MIN_FILES: 'MIN_FILES',
+            MIN_SIZE: 'MIN_SIZE',
+            MIN_TOTAL_SIZE: 'MIN_TOTAL_SIZE',
+            TYPE: 'TYPE'
+        },
+
         html5Attributes: {
             extension: 'extension',
             maxfiles: 'maxFiles',
@@ -43,7 +54,7 @@
          * - minTotalSize: The minimum size in bytes for all files
          * - message: The invalid message
          * - type: The allowed MIME type, separated by a comma
-         * @returns {Boolean}
+         * @returns {Boolean|Object}
          */
         validate: function(validator, $field, options, validatorName) {
             var value = validator.getFieldValue($field, validatorName);
@@ -62,35 +73,102 @@
                     total     = files.length,
                     totalSize = 0;
 
-                if ((options.maxFiles && total > parseInt(options.maxFiles, 10))        // Check the maxFiles
-                    || (options.minFiles && total < parseInt(options.minFiles, 10)))    // Check the minFiles
-                {
-                    return false;
+                // Check the maxFiles
+                if (options.maxFiles && total > parseInt(options.maxFiles, 10)) {
+                    return {
+                        valid: false,
+                        error: this.Error.MAX_FILES
+                    };
                 }
 
+                // Check the minFiles
+                if (options.minFiles && total < parseInt(options.minFiles, 10)) {
+                    return {
+                        valid: false,
+                        error: this.Error.MIN_FILES
+                    };
+                }
+
+                var metaData = {};
                 for (var i = 0; i < total; i++) {
                     totalSize += files[i].size;
                     ext        = files[i].name.substr(files[i].name.lastIndexOf('.') + 1);
+                    metaData   = {
+                        file: files[i],
+                        size: files[i].size,
+                        ext: ext,
+                        type: files[i].type
+                    };
 
-                    if ((options.minSize && files[i].size < parseInt(options.minSize, 10))                      // Check the minSize
-                        || (options.maxSize && files[i].size > parseInt(options.maxSize, 10))                   // Check the maxSize
-                        || (extensions && $.inArray(ext.toLowerCase(), extensions) === -1)                      // Check file extension
-                        || (files[i].type && types && $.inArray(files[i].type.toLowerCase(), types) === -1))    // Check file type
-                    {
-                        return false;
+                    // Check the minSize
+                    if (options.minSize && files[i].size < parseInt(options.minSize, 10)) {
+                       return {
+                           valid: false,
+                           error: this.Error.MIN_SIZE,
+                           metaData: metaData
+                       };
+                    }
+
+                    // Check the maxSize
+                    if (options.maxSize && files[i].size > parseInt(options.maxSize, 10)) {
+                        return {
+                            valid: false,
+                            error: this.Error.MAX_SIZE,
+                            metaData: metaData
+                        };
+                    }
+
+                    // Check file extension
+                    if (extensions && $.inArray(ext.toLowerCase(), extensions) === -1) {
+                        return {
+                            valid: false,
+                            error: this.Error.EXTENSION,
+                            metaData: metaData
+                        };
+                    }
+
+                    // Check file type
+                    if (files[i].type && types && $.inArray(files[i].type.toLowerCase(), types) === -1) {
+                        return {
+                            valid: false,
+                            error: this.Error.TYPE,
+                            metaData: metaData
+                        };
                     }
                 }
 
-                if ((options.maxTotalSize && totalSize > parseInt(options.maxTotalSize, 10))        // Check the maxTotalSize
-                    || (options.minTotalSize && totalSize < parseInt(options.minTotalSize, 10)))    // Check the minTotalSize
-                {
-                    return false;
+                // Check the maxTotalSize
+                if (options.maxTotalSize && totalSize > parseInt(options.maxTotalSize, 10)) {
+                    return {
+                        valid: false,
+                        error: this.Error.MAX_TOTAL_SIZE,
+                        metaData: {
+                            totalSize: totalSize
+                        }
+                    };
+                }
+
+                // Check the minTotalSize
+                if (options.minTotalSize && totalSize < parseInt(options.minTotalSize, 10)) {
+                    return {
+                        valid: false,
+                        error: this.Error.MIN_TOTAL_SIZE,
+                        metaData: {
+                            totalSize: totalSize
+                        }
+                    };
                 }
             } else {
                 // Check file extension
                 ext = value.substr(value.lastIndexOf('.') + 1);
                 if (extensions && $.inArray(ext.toLowerCase(), extensions) === -1) {
-                    return false;
+                    return {
+                        valid: false,
+                        error: this.Error.EXTENSION,
+                        metaData: {
+                            ext: ext
+                        }
+                    };
                 }
             }
 

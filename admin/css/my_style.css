@@ -15,14 +15,14 @@ body {
 
 .label-primary {
     
-    font-size: 90%;
+   /* font-size: 90%;
     font-weight: 300;
     border-radius: 1px;
     letter-spacing: 1px;
     display: block;
     text-align: right;
     padding-top: 8px;
-    padding-bottom: 8px;
+    padding-bottom: 8px;*/
     
 }
 
@@ -36,12 +36,67 @@ body {
 }
 
 .nice_td_header {
-    background-color: #e6f2ff;
+   
    text-align: right;
     padding-right: 4px;
     font-weight: 400;
      letter-spacing: 1px;
 }
 
+
+.ipoteka_tender_how_sell_TD {
+   
+   width: 33.33%;
+   text-align: center;
+  
+}
+
+.ipoteka_tender_how_sell_TD span {
+    
+  font-weight: 300;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+  background: #d9edf7;
+  color: #555555;
+  border: 1px solid #dddddd;
+ 
+  
+    
+}
+
+legend {
+ 
+   /* font-size: 1em;
+    color: grey;
+    border-width: 1px;
+    padding: 4px;
+    padding-bottom: 0px;*/
+    margin-top: 30px;
+    margin-bottom: 30px;
+   
+    
+}
+
+
+.jumbotron {
+    
+    min-height: 400px;
+    
+    
+}
+
+/*
+legend span {
+   
+ border: 1px solid #e5e5e5;
+    display: inline-block;
+    border-bottom: 0px;
+    padding: 5px 10px;
+    margin: 0px;
+    background: #111;
+    color: whitesmoke;
+    border-radius: 4px 4px 0px 0px;
+}
+*/
 
 

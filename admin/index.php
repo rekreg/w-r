@@ -691,7 +691,7 @@ $('#floors_do').priceFormat({
       
 $('#sandbox-container .input-daterange').datepicker({
     format: "yyyy",
-    startDate: "-500y",
+    startDate: "-670y",
     endDate: "01/01/2016",
     startView: 2,
     minViewMode: 2,

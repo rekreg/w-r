@@ -6,10 +6,15 @@ require_once("includes/init.php");
 
 
 if(!$session->is_signed_in()) {
-//redirect("login.php");
-}
+redirect("login.php");
+} 
 
- 
+//$session->delete_current_uniq_id();
+
+$session->set_current_uniq_id();
+
+
+
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Берем из $_POST все переменные
@@ -18,12 +23,48 @@ foreach($_POST as $key =>$value){
     }
 
 
+    
+foreach($_POST as $key =>$value){
+        if($key == "phone") {
+           
+$clean_phone = trim($_POST[$key]);
+$wrong_characters = array(" ", "(", ")", "-");
+$clean_phone = str_replace($wrong_characters, "", $clean_phone);  
+ 
+
+if($clean_phone[0] == 8) {            
+$ptn = "/^8/";  // Regex
+$rpltxt = "+7";  // Replacement string
+$clean_phone = preg_replace($ptn, $rpltxt, $clean_phone);       
+}
+elseif($clean_phone[0] == 7) {
+    
+$clean_phone = "+".$clean_phone;    
+}
+            
+            
+    
+$$key = $clean_phone;
+            
+        } else {    
+        $$key = trim($_POST[$key]); }
+    }    
+    
+    
+    
+    
+    
+    
 
 
 
 $object_u = new Object_u();
  
    $object_u->id = $id;
+   $object_u->user_id = $session->user_id;
+
+   $object_u->uniq_id = $session->current_uniq_id;
+    
    // Адрес
    $object_u->address = $address;
    $object_u->region_type = $region_type;
@@ -58,17 +99,22 @@ $object_u = new Object_u();
    $object_u->wc = $wc;
    $object_u->windows = $windows;
    $object_u->state = $state;
+   
+   $price = str_replace(' ', '', $price);
    $object_u->price = $price;
+
    $object_u->currency = $currency;
    $object_u->ipoteka = $ipoteka;
    $object_u->tender = $tender;
    $object_u->how_sell = $how_sell;
    $object_u->description = $description;
-
+   $object_u->phone = $phone;
 
 if($object_u->create()) {
     
  //$session->login($user_found);
+ $session->delete_current_uniq_id();
+     
  redirect("congrat_add_object.php");
     
 } 
@@ -107,7 +153,10 @@ else {
 
 <form class="form-horizontal" id="add_object_form" action="" method="post">
   <fieldset>
-    <legend>Адрес квартиры</legend>
+    <legend>
+      <span>Адрес квартиры</span> 
+      </legend>
+        
       
     <div class="form-group">
         
@@ -173,9 +222,11 @@ else {
        
       
       
-         <legend>Параметры квартиры</legend>
      
-    
+     
+    <legend>
+      <span>Параметры квартиры</span> 
+      </legend>
          
     <div class="form-group">
     
@@ -295,7 +346,9 @@ else {
       
     
          
-             <legend>Дополнительные параметры </legend>
+             <legend>
+      <span> Дополнительные параметры</span>
+      </legend>
 
     
     
@@ -391,18 +444,44 @@ else {
   
     
 
-         <legend>Стоимость</legend>
+        
+      
+      
+      
+    <legend>
+        <span>Фотографии</span>
+      </legend>
+      <div class="form-group">
+            <div class="col-md-12">
+          
+                   <!-- <label>Preview File Icon</label>-->
+                    <div class="text-center">
+           
+                        
+               <input id="images" name="images[]" type="file" multiple class="file-loading" accept="image/*">       
+                        
+                        
+                    </div>
+          </div>
+                </div>  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <legend>
+          <span>Стоимость</span>
+      
+      </legend>
 
  
-    
-             
-    
-    
-    
-    
-    
-    
-    
     <div class="form-group">
     
     
@@ -491,6 +570,7 @@ else {
          
       
       
+       
       
       
       
@@ -498,7 +578,11 @@ else {
       
       
     
-             <legend>Описание</legend>
+             <legend>
+                 
+             <span>Описание</span>    
+      
+      </legend>
 
     
       <div class="form-group">
@@ -518,6 +602,45 @@ else {
     </div>
     
   
+      
+      
+        <legend>
+                 
+             <span>Контактные данные</span>    
+      
+      </legend>
+      
+    
+     <div class="form-group">
+      
+         <label for="phone" class="col-md-3 control-label">Ваш телефон:</label>
+      
+       
+         
+     <div class="col-md-4 inputGroupContainer">
+       <div class="input-group">
+       <input type="tel" name="phone" class="form-control" id="phone" value="<?=$user->phone?>" placeholder="8 (000) 000-00-00" >
+        <span class="input-group-addon">
+     <i class="fa fa-lg fa-mobile" aria-hidden="true" style="width: 20px;"></i>
+        </span>
+        </div> 
+
+    </div>    
+         
+         
+        
+          
+         
+    </div>
+    
+   
+     
+      
+      <br><hr><br><br>
+      
+      
+      
+      
   
     <div class="form-group">
       <div class="col-md-8 col-md-offset-3">
@@ -581,6 +704,37 @@ else {
     
     
     
+    
+    
+<script src="js/plugins/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
+
+<!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview.
+     This must be loaded before fileinput.min.js -->
+<!--<script src="js/lib/bootstrap-fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>-->
+
+<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files.
+     This must be loaded before fileinput.min.js -->
+<script src="js/plugins/bootstrap-fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
+
+<!-- the main fileinput plugin file -->
+<script src="js/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+
+<!-- bootstrap.js below is needed if you wish to zoom and view file content 
+     in a larger detailed modal dialog -->
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" type="text/javascript"></script>-->
+
+<!-- optionally if you need a theme like font awesome theme you can include 
+    it as mentioned below -->
+<!--<script src="js/lib/bootstrap-fileinput/themes/fa/theme.js"></script>-->
+
+<!-- optionally if you need translation for your language then include 
+    locale file as mentioned below -->
+<script src="js/plugins/bootstrap-fileinput/js/locales/ru.js"></script>    
+    
+    
+    
+    
+    
 
 <!--ДАДАТА подсказки -->   
     
@@ -591,13 +745,11 @@ else {
 
     
     
-    <script type="text/javascript">
-   
-   
-</script>
+ 
     
-    
-    
+<script type="text/javascript" src="plugins/intl-tel-input-9.0-2.3/build/js/intlTelInput.min.js"></script>    
+
+<script type="text/javascript" src="plugins/jQuery-Mask-Plugin/dist/jquery.mask.min.js"></script>    
     
     
     
@@ -613,7 +765,84 @@ else {
 <script>
   $(document).ready(function () {
 
-  //var fias_level;   
+  //var fias_level;  
+      
+      
+      
+    var $input = $("#images");
+    $input.fileinput({
+    language: 'ru',
+    uploadUrl: "uploads/upload_image_oop.php", // server upload action
+    uploadAsync: true,
+    allowedFileExtensions: ['jpg', 'jpeg', 'gif', 'png'],
+    showRemove: false, // hide remove button
+    showUpload: false,
+	showCaption: false,
+    showClose: false,
+    fileActionSettings: {
+    dragIcon: '<i class="glyphicon glyphicon-ok-sign file-icon-large text-success"></i>',
+    //showDrag: false,
+    showZoom: false
+    
+    
+    },
+        
+   
+   
+    dropZoneClickTitle: "<br>(или нажмите Добавить фото)",   
+        
+    showBrowse: false,
+    browseOnZoneClick: true,
+    //maxFileSize: 1000,
+    
+   // deleteUrl: "delete_uploaded_file.php?file_name=all",
+   // minFileCount: 1,
+    maxFileCount: 25,
+    initialPreviewAsData: true // identify if you are sending preview data only and not the markup
+
+    
+        
+}).on("filebatchselected", function(event, files) {
+    // trigger upload method immediately after files are selected
+    $input.fileinput("upload");
+/*}).on('filesorted', function(e, params) {
+    console.log('File sorted params', params);*/
+/*}).on('fileuploaded', function(e, params) {
+    console.log('File uploaded params', params);*/
+}).on('fileuploaderror', function(event, data, msg) {
+    var form = data.form, files = data.files, extra = data.extra,
+        response = data.response, reader = data.reader;
+    //console.log('File upload error');
+        //console.log(msg);
+        //fileinput("upload");
+       // $input.fileinput('cancel');
+   // get message
+   //alert(msg);
+});
+     
+     
+      
+      
+      
+      
+      
+         
+    $('#add_object_form')
+        .find('[name="phone"]')
+            .intlTelInput({
+                utilsScript: 'plugins/intl-tel-input-9.0-2.3/build/js/utils.js',
+                autoPlaceholder: true,
+                onlyCountries: ["ru"]
+                //allowDropdown: false
+                
+            });
+    
+     
+      
+  $('#phone').mask('0 (000) 000-00-00');        
+      
+      
+      
       
       
  $('#metro').selectpicker({
@@ -1073,7 +1302,49 @@ $('#characterLeft').text('2000 символов осталось');
                         //message: 'The color is required'
                     }
                 }
-            }
+            },
+            
+               phone: {
+          validators: {
+            notEmpty: {
+                        message: 'Пожалуйста, введите номер телефона'
+                    },
+              callback: {
+            callback: function(value, validator, $field) {
+            var isValid = value === '' || $field.intlTelInput('isValidNumber'),
+             err     = $field.intlTelInput('getValidationError'),
+                    message = null;
+                 switch (err) {
+              case intlTelInputUtils.validationError.INVALID_COUNTRY_CODE:
+             message = 'Код страны не действительный';
+                 break;
+
+             case intlTelInputUtils.validationError.TOO_SHORT:
+              message = 'Номер телефона слишком короткий';
+                break;
+
+             case intlTelInputUtils.validationError.TOO_LONG:
+          message = 'Номер телефона слишком длинный';
+             break;
+
+             case intlTelInputUtils.validationError.NOT_A_NUMBER:
+            message = 'Номер телефона слишком короткий';
+                 break;
+
+             default:
+          message = 'Номер телефона не действительный';
+                                        break;
+                                }
+
+              return {
+                   valid: isValid,
+                 message: message
+                                };
+                            }
+                        }
+                    }
+                }
+            
         }
     });
       

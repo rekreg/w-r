@@ -53,11 +53,12 @@
             var ns      = this._namespace,
                 type    = $field.attr('type'),
                 field   = $field.attr('data-' + ns + '-field'),
-                row     = this.options.fields[field].row || this.options.row.selector,
-                $parent = $field.closest(row);
+                $parent = $field.parent();
 
-            if ($parent.find('label').length === 0) {
-                $icon.addClass('fv-icon-no-label');
+            if ('checkbox' === type || 'radio' === type) {
+                if ($parent.is('label')) {
+                    $icon.insertAfter($parent);
+                }
             }
         }
     });

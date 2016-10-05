@@ -58,18 +58,12 @@
             var ns      = this._namespace,
                 type    = $field.attr('type'),
                 field   = $field.attr('data-' + ns + '-field'),
-                row     = this.options.fields[field].row || this.options.row.selector,
-                $row    = $field.closest(row),
                 $parent = $field.parent();
 
             if ('checkbox' === type || 'radio' === type) {
                 if ($parent.is('label')) {
                     $icon.insertAfter($parent);
                 }
-            }
-
-            if ($row.find('label').length === 0) {
-                $icon.addClass('fv-icon-no-label');
             }
 
             // Support UIKit form-password component
