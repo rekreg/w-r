@@ -4,12 +4,9 @@ error_reporting(E_ALL & ~E_NOTICE);
 require_once("includes/init.php");
 
 
-
 if(!$session->is_signed_in()) {
 redirect("login.php");
 } 
-
-//$session->delete_current_uniq_id();
 
 $session->set_current_uniq_id();
 
@@ -18,13 +15,16 @@ $session->set_current_uniq_id();
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Берем из $_POST все переменные
-foreach($_POST as $key =>$value){
+/*
+foreach($_POST as $key => $value){
         $$key = trim($_POST[$key]);    
     }
-
+*/
 
     
 foreach($_POST as $key =>$value){
+    
+    if($key != "images") {
         if($key == "phone") {
            
 $clean_phone = trim($_POST[$key]);
@@ -48,6 +48,10 @@ $$key = $clean_phone;
             
         } else {    
         $$key = trim($_POST[$key]); }
+        }
+    
+    
+    
     }    
     
     

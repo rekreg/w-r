@@ -17,10 +17,9 @@ public function open_db_connection(){
 $this->connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     
 if($this->connection->connect_errno){
-    
     die("Database connection failed badly". mysqli_error());
-    
 } 
+$this->connection->set_charset("utf8");
     
     
 }       

@@ -1,5 +1,5 @@
 
-<nav class="navbar navbar-inverse" style="border-radius:0px;">
+<nav class="navbar navbar-default" style="border-radius:0px;">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">

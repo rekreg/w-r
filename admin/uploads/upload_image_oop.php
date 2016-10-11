@@ -91,9 +91,9 @@ if ($success === true) {
 $key = $photo->code;
 
 $url_preview = $photo->path;
-$url_preview = str_replace("/Applications/mampstack-5.4.38-0/apache2/htdocs/w-realtor/admin/", "http://localhost:8080/w-realtor/admin/", $url_preview);
+$url_preview = str_replace("/Applications/MAMP/htdocs/w-r/admin/", "http://localhost:8888/w-r/admin/", $url_preview);
 
-
+///Applications/MAMP/htdocs/w-r/admin/uploads/images/1/1_57f4f0e1885cd/ad8807a102e65a256f5d59285cc46cb1.jpg
 
 $url_delete = 'uploads/delete_uploaded_file.php?file_name='.$photo->new_img_name;
 echo json_encode([

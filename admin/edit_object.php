@@ -17,7 +17,13 @@ if(empty($_GET['id'])) {
  redirect("objects.php");   
     
 } else {
+    
     $object = Object_u::find_by_id($_GET['id']);
+    
+    $photo_arr = Photo::find_photos_by_obj_uniq_id($object->uniq_id);
+   
+    $photos_info = Photo::get_photo_paths($photo_arr);
+    
     
     if(isset($_POST['update'])) {
         
@@ -487,12 +493,6 @@ foreach($state_arr as $value){
 }
             ?>       
             
-            
-            
-            
-            
-            
-
 
 
        </select>
@@ -502,17 +502,41 @@ foreach($state_arr as $value){
   
     
 
+  
+      
+   <?php 
+      echo "<pre>";
+      print_r($photos);
+      echo "</pre>";
+      echo $object->uniq_id;
+      
+      ?>
+    <legend>
+        <span>Фотографии</span>
+      </legend>
+      <div class="form-group">
+            <div class="col-md-12">
+          
+                   <!-- <label>Preview File Icon</label>-->
+                    <div class="text-center">
+           
+                        
+               <input id="images" name="images[]" type="file" multiple class="file-loading" accept="image/*">       
+                        
+                        
+                    </div>
+          </div>
+                </div>  
+      
+      
+            
+      
+      
+      
+      
+      
          <legend>Стоимость</legend>
 
- 
-    
-             
-    
-    
-    
-    
-    
-    
     
     <div class="form-group">
     
@@ -755,6 +779,32 @@ foreach($currency_arr as $value){
 <script type="text/javascript" src="formvalidation-dist-v0.7.1/dist/js/language/ru_RU.js"></script>
     
     
+<!-- ФАЙЛ ИНПУТ -->
+    
+<script src="js/plugins/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
+
+<!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview.
+     This must be loaded before fileinput.min.js -->
+<!--<script src="js/lib/bootstrap-fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>-->
+
+<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files.
+     This must be loaded before fileinput.min.js -->
+<script src="js/plugins/bootstrap-fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
+
+<!-- the main fileinput plugin file -->
+<script src="js/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+
+<!-- bootstrap.js below is needed if you wish to zoom and view file content 
+     in a larger detailed modal dialog -->
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" type="text/javascript"></script>-->
+
+<!-- optionally if you need a theme like font awesome theme you can include 
+    it as mentioned below -->
+<!--<script src="js/lib/bootstrap-fileinput/themes/fa/theme.js"></script>-->
+
+<!-- optionally if you need translation for your language then include 
+    locale file as mentioned below -->
+<script src="js/plugins/bootstrap-fileinput/js/locales/ru.js"></script>    
     
 
 <!--ДАДАТА подсказки -->   
@@ -785,7 +835,90 @@ foreach($currency_arr as $value){
 <script>
   $(document).ready(function () {
 
-  //var fias_level;   
+
+      
+        
+    var $input = $("#images");
+    $input.fileinput({
+    language: 'ru',
+    uploadUrl: "uploads/upload_image_oop.php", // server upload action
+    uploadAsync: true,
+    allowedFileExtensions: ['jpg', 'jpeg', 'gif', 'png'],
+    showRemove: false, // hide remove button
+    showUpload: false,
+	showCaption: false,
+    showClose: false,
+    fileActionSettings: {
+    dragIcon: '<i class="glyphicon glyphicon-ok-sign file-icon-large text-success"></i>',
+    //showDrag: false,
+    showZoom: false
+    
+    
+    },
+        
+   
+   
+    dropZoneClickTitle: "<br>(или нажмите Добавить фото)",   
+        
+    showBrowse: false,
+    browseOnZoneClick: true,
+    //maxFileSize: 1000,
+    
+   // deleteUrl: "delete_uploaded_file.php?file_name=all",
+   // minFileCount: 1,
+    maxFileCount: 25,
+        
+    <?php
+        if($photos_info) {
+            
+         echo $photos_info;  
+            
+            
+        }
+        
+        ?>    
+        
+       
+    initialPreviewAsData: true // identify if you are sending preview data only and not the markup
+
+    //
+        
+        
+        
+        
+        
+        
+        
+        
+    //        
+        
+}).on("filebatchselected", function(event, files) {
+    // trigger upload method immediately after files are selected
+    $input.fileinput("upload");
+/*}).on('filesorted', function(e, params) {
+    console.log('File sorted params', params);*/
+/*}).on('fileuploaded', function(e, params) {
+    console.log('File uploaded params', params);*/
+}).on('fileuploaderror', function(event, data, msg) {
+    var form = data.form, files = data.files, extra = data.extra,
+        response = data.response, reader = data.reader;
+    //console.log('File upload error');
+        //console.log(msg);
+        //fileinput("upload");
+       // $input.fileinput('cancel');
+   // get message
+   //alert(msg);
+});
+         
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
  

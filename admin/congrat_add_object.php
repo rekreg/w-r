@@ -30,14 +30,15 @@ if(!$session->is_signed_in()) {
   
   <p>Оно появится в поиске в течении 30 мин. после проверки модератором.</p>
          
-         <a href="new_object.php" class="btn btn-lg btn-success">
-         
-             Добавить еще одно объявление
-         
-         </a>
+     
   
   
 
+         <a href="new_object.php" class="btn btn-lg btn-warning">
+           <i class="fa fa-wpforms" aria-hidden="true"></i> Добавить еще одно объявление</a>  
+         
+         
+         
 
   <br>
   <!--<p><a class="btn btn-info btn-lg" href="egrp-online.php" role="button">Заказать еще одну выписку из ЕГРП</a></p>-->

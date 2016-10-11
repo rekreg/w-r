@@ -246,10 +246,8 @@ private function has_the_attribute($the_attribute) {
        $output .= "<div class='jumbotron text-center'>
   <h1>Хмм! Странно <i class='fa fa-smile-o text-danger' aria-hidden='true'></i></h1>
   <p>У Вас пока нет объявлений. Но вы можете легко его создать.</p>
-  <p><a href='new_object.php' class='btn btn-success btn-lg'><i class='fa fa-plus' aria-hidden='true'></i> Добавить объявление</a></p>
+  <p><a href='new_object.php' class='btn btn-warning btn-lg'><i class='fa fa-wpforms' aria-hidden='true'></i> Добавить объявление</a></p>
 </div>";   
-          
-          
           
           
       return $output;     

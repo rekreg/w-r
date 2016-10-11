@@ -2,7 +2,15 @@
 
 defined('DS')? null : define('DS', DIRECTORY_SEPARATOR);
 
-defined('SITE_ROOT')? null : define('SITE_ROOT', DS.'Applications'.DS.'mampstack-5.4.38-0'.DS.'apache2'.DS.'htdocs'.DS.'w-realtor');
+//defined('SITE_ROOT')? null : define('SITE_ROOT', DS.'Applications'.DS.'mampstack-5.4.38-0'.DS.'apache2'.DS.'htdocs'.DS.'w-realtor');
+
+
+
+defined('SITE_ROOT')? null : define('SITE_ROOT', DS.'Applications'.DS.'MAMP'.DS.'htdocs'.DS.'w-r');
+
+///Applications/MAMP/htdocs/w-r
+
+
 
 /*
 defined('SITE_ROOT')? null : define('SITE_ROOT', 'http://localhost:8080/w-realtor');*/

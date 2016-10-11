@@ -275,6 +275,64 @@ if($this->size > 12582912) {
     } 
     
     
+   public static function find_photos_by_obj_uniq_id($id) {
+       
+    $query = "SELECT * FROM ". static::$db_table." WHERE obj_uniq_id='{$id}'";
+    
+   // return $query;   
+       
+    $the_result_array = static::find_by_query($query);
+        
+    return !empty($the_result_array) ? $the_result_array : false;     
+        
+  
+    } 
+
+   public static function get_photo_paths($arr) {
+    
+       
+     $output = "initialPreview: [";
+       
+       foreach ($arr as $obj) {
+       
+       $user_id = explode("_", $obj->obj_uniq_id);
+       $path = $user_id[0] ."/". $obj->obj_uniq_id."/".$obj->new_img_name;
+       
+       $output .= "'http://localhost:8888/w-r/admin/uploads/images/".$path."',";
+           
+                    }  
+       $output = rtrim($output, ",");   
+       $output .= "],";   
+       
+       
+       
+       
+       
+    $output .= "initialPreviewConfig: [";   
+  
+    foreach ($arr as $obj) {
+    
+    $output .= "{caption: '". $obj->new_img_name. "', ";    
+    $output .= "size: ". $obj->size. ", "; 
+    $output .= "width: '120px', ";  
+    $output .= "url: 'uploads/delete_uploaded_file.php?file_name=". $obj->new_img_name. "'},";
+
+    }   
+    
+    $output = rtrim($output, ",");   
+    $output .= "],";
+   
+     
+       
+       
+     return $output;   
+       
+   }
+    
+    
+    
+    
+    
     public function delete_photo_from_db() {
         
      global $database;
