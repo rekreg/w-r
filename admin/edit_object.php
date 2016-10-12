@@ -20,6 +20,11 @@ if(empty($_GET['id'])) {
     
     $object = Object_u::find_by_id($_GET['id']);
     
+    // Берем из базы уникальный ID
+    $_SESSION['current_uniq_id'] = $object->uniq_id;
+    $session->set_current_uniq_id();
+
+    
     $photo_arr = Photo::find_photos_by_obj_uniq_id($object->uniq_id);
    
     $photos_info = Photo::get_photo_paths($photo_arr);
@@ -63,7 +68,7 @@ $object->$key = $clean_phone;
             
         }
             
-            elseif($key != "update") {
+            elseif($key != "update" && $key != "images") {
               $object->$key = trim($_POST[$key]); 
             }   
     }

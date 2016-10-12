@@ -41,9 +41,13 @@ class Photo extends Db_object {
    
 private function get_current_uniq_id() {
     
-    if($_SESSION['current_uniq_id']) {
+    if($this->obj_uniq_id){
+      return $this->obj_uniq_id;  
+    }
+    elseif($_SESSION['current_uniq_id']){
       return $_SESSION['current_uniq_id'];  
-    } else {
+    } 
+    else {
         
         return null;
     } 
@@ -290,8 +294,9 @@ if($this->size > 12582912) {
 
    public static function get_photo_paths($arr) {
     
+    if(empty($arr)) { return NULL; }   
        
-     $output = "initialPreview: [";
+    $output = "initialPreview: [";
        
        foreach ($arr as $obj) {
        
@@ -304,9 +309,7 @@ if($this->size > 12582912) {
        $output = rtrim($output, ",");   
        $output .= "],";   
        
-       
-       
-       
+   
        
     $output .= "initialPreviewConfig: [";   
   
@@ -323,7 +326,6 @@ if($this->size > 12582912) {
     $output .= "],";
    
      
-       
        
      return $output;   
        
