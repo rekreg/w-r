@@ -144,7 +144,9 @@ if($the_object->has_the_attribute($the_attribute)){
         $properties_pairs = array();
         
         foreach ($properties as $key => $value) {
-         $properties_pairs[] = "{$key}='{$value}'";   
+            if(!empty($value)) {
+         $properties_pairs[] = "{$key}='{$value}'";
+                }
         }
         
         

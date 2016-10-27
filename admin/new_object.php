@@ -8,7 +8,8 @@ if(!$session->is_signed_in()) {
 redirect("login.php");
 } 
 
-$session->set_current_uniq_id();
+
+$session->set_current_uniq_id("new");
 
 
 
@@ -144,7 +145,25 @@ else {
 <div class="row">
 <div class="col-md-12">
 
-<h1 class="text-center">Новое объявление</h1>
+<h1 class="text-center">Новое объявление
+    
+    <?php //$_SESSION['current_uniq_id']; ?>
+    <?php
+    //echo $_SERVER['HTTP_REFERER'];
+    //echo "<br>";
+    //$pos = strpos($_SERVER["HTTP_REFERER"], "new_object");
+
+  /* if ($pos === false) {
+       
+       echo "Плохо!";
+   } else {
+       
+       echo "Хорошо!";
+   }    */
+    
+    
+    ?>
+    </h1>
     
  
 <br><br>

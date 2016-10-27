@@ -21,8 +21,8 @@ if(empty($_GET['id'])) {
     $object = Object_u::find_by_id($_GET['id']);
     
     // Берем из базы уникальный ID
-    $_SESSION['current_uniq_id'] = $object->uniq_id;
-    $session->set_current_uniq_id();
+    //$_SESSION['current_uniq_id'] = $object->uniq_id;
+    $session->set_current_uniq_id($object->uniq_id);
 
     
     $photo_arr = Photo::find_photos_by_obj_uniq_id($object->uniq_id);
@@ -124,7 +124,10 @@ $object->$key = $clean_phone;
 <div class="row">
 <div class="col-md-12">
 
-<h1 class="text-center">Редактировать объявление</h1>
+<h1 class="text-center">Редактировать объявление
+    
+    <br> <?php //$_SESSION['current_uniq_id']; ?>
+    </h1>
     
  
 <br><br>
@@ -509,13 +512,7 @@ foreach($state_arr as $value){
 
   
       
-   <?php 
-      echo "<pre>";
-      print_r($photos);
-      echo "</pre>";
-      echo $object->uniq_id;
-      
-      ?>
+   
     <legend>
         <span>Фотографии</span>
       </legend>
@@ -863,7 +860,7 @@ foreach($currency_arr as $value){
         
    
    
-    dropZoneClickTitle: "<br>(или нажмите Добавить фото)",   
+    dropZoneClickTitle: "<br>(или нажмите <i style='border-bottom: 2px dashed grey'>Добавить фото</i>)",   
         
     showBrowse: false,
     browseOnZoneClick: true,

@@ -101,9 +101,14 @@ private function check_the_login() {
     
     
   
-public function set_current_uniq_id() {
+public function set_current_uniq_id($id) {
+ 
+ $pos = strpos($_SERVER["HTTP_REFERER"], "new_object");
+ if ($pos === false) { $this->delete_current_uniq_id(); }
     
-  if($this->user_id) {
+ if($id === "new") {    
+  
+     if($this->user_id) {
       
     if(empty($_SESSION['current_uniq_id'])) {
         
@@ -116,7 +121,12 @@ public function set_current_uniq_id() {
     }
                     
                     }
-    
+     
+ } else {
+     
+     $_SESSION['current_uniq_id'] = $id;
+     
+ }
     
     
     
